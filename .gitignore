@@ -76,6 +76,8 @@ certora_*
 # extends
 /abi
 /abi-pure
+/lib
+/contracts/diamond-2
 
 /typechain-types
 /**/*.js
