@@ -1,5 +1,4 @@
-中文 / [English](https://github.com/VegieDoggie/solidity-framework/blob/main/README.en.md)
-
+中文 / [English](https://github.com/VegieDoggie/solidity-framework-template/blob/main/README.en.md)
 # 通用Solidity开发测试框架
 
 核心操作:
