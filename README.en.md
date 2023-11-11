@@ -1,4 +1,4 @@
-[中文](https://github.com/VegieDoggie/solidity-framework/blob/main/README.md) / English
+[中文](https://github.com/VegieDoggie/solidity-framework-template/blob/main/README.md) / English
 
 # Universal Solidity Development and Testing Framework
 
