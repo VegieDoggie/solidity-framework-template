@@ -2,7 +2,6 @@ import {Fragment, FunctionFragment} from "ethers";
 import {HardhatUserConfig} from "hardhat/config";
 import networks from "./hardhat.network.json";
 import "@nomicfoundation/hardhat-toolbox";
-import "@nomicfoundation/hardhat-foundry";
 import "@openzeppelin/hardhat-upgrades";
 import "hardhat-abi-exporter";
 import "hardhat-ignore-warnings";
