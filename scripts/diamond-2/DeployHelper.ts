@@ -4,36 +4,49 @@ import fs from "fs";
 import path from "path";
 import logger from "./logger";
 
-/*
-* deploy 批量部署合约(额外扩充属性:address)，参数: 合约名 || [合约名，构造参数列表]
-* 假设 Test.sol 的构造函数无参，Test1.sol 的构造函数参数为: uint256,uint256
-* 例子1: 单部署 Test.sol : batchDeploy("Test")
-* 例子2: 单部署 Test1.sol: batchDeploy(["Test1", [60, 0]])
-* 例子3: 批量部署 Test.sol + Test1.sol: batchDeploy("Test", ["Test1", [60, 0]])
-* */
-export async function deploy(isVerify: boolean, ...names: (string | [string, any[]])[]): Promise<(BaseContract & { address: string }) []> {
-    const instances = await _deploy(...names)
-    if (isVerify) {
-        if (network.name !== "hardhat") {
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            logger.info("verify......")
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            for (let i = 0; i < names.length; i++) {
-                let info = names[i]
-                if (typeof info === 'string') {
-                    await verify(info, instances[i].address)
-                } else {
-                    if (info.length != 2 || info[1] == undefined) {
-                        continue
+export class DeployHelper {
+    /*
+    * deploy 批量部署合约(额外扩充属性:address)，参数: 合约名 || [合约名，构造参数列表]
+    * 假设 Test.sol 的构造函数无参，Test1.sol 的构造函数参数为: uint256,uint256
+    * 例子1: 单部署 Test.sol : batchDeploy("Test")
+    * 例子2: 单部署 Test1.sol: batchDeploy(["Test1", [60, 0]])
+    * 例子3: 批量部署 Test.sol + Test1.sol: batchDeploy("Test", ["Test1", [60, 0]])
+    * */
+    static async deploy(isVerify: boolean, ...names: (string | [string, any[]])[]): Promise<(BaseContract & {
+        address: string
+    }) []> {
+        const instances = await _deploy(...names)
+        if (isVerify) {
+            if (network.name !== "hardhat") {
+                await new Promise(resolve => setTimeout(resolve, 1000))
+                logger.info("verify......")
+                await new Promise(resolve => setTimeout(resolve, 1000))
+                for (let i = 0; i < names.length; i++) {
+                    let info = names[i]
+                    if (typeof info === 'string') {
+                        await DeployHelper.verify(info, instances[i].address)
+                    } else {
+                        if (info.length != 2 || info[1] == undefined) {
+                            continue
+                        }
+                        await DeployHelper.verify(info[0], instances[i].address, ...info[1])
                     }
-                    await verify(info[0], instances[i].address, ...info[1])
                 }
+            } else {
+                logger.warning("[hardhat] verify ignored")
             }
-        } else {
-            logger.warning("[hardhat] verify ignored")
         }
+        return instances
     }
-    return instances
+
+    // https://github.com/NomicFoundation/hardhat/tree/main/packages/hardhat-verify
+    static async verify(name: string, address: string, ...args: any) {
+        await run("verify:verify", {
+            contract: `${parseVerifyPath(name)}:${name}`,
+            address: address,
+            constructorArguments: args ?? [],
+        });
+    }
 }
 
 async function _deploy(...names: (string | [string, any[]])[]): Promise<(BaseContract & { address: string }) []> {
@@ -75,22 +88,6 @@ async function _deploy(...names: (string | [string, any[]])[]): Promise<(BaseCon
     return instances;
 }
 
-// https://github.com/NomicFoundation/hardhat/tree/main/packages/hardhat-verify
-export async function verify(name: string, address: string, ...args: any) {
-    await run("verify:verify", {
-        contract: `${parseVerifyPath(name)}:${name}`,
-        address: address,
-        constructorArguments: args ?? [],
-    });
-}
-
-/**
- * 查找contract文件的路径。
- * 如果找不到，它会输出错误信息并退出程序。
- * @param filename
- * @param rootDir
- * @returns contract文件路径
- */
 function parseVerifyPath(filename: string, rootDir?: string): string {
     let rootDirectory = rootDir ?? __dirname
     while (1) {

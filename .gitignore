@@ -1,83 +1,22 @@
-*.swp
-*.swo
-
-# Logs
-logs
-*.log
-
-# Runtime data
-pids
-*.pid
-*.seed
-allFiredEvents
-scTopics
-
-# Coverage directory used by tools like istanbul
-coverage
-coverage.json
-coverageEnv
-
-# node-waf configuration
-.lock-wscript
-
-# Dependency directory
 node_modules
-
-# Debug log from npm
-npm-debug.log
-
-# local env variables
 .env
 
-# truffle build directory
-build/
+# Hardhat files
+/cache
+/artifacts
 
-# macOS
-.DS_Store
-
-# truffle
-.node-xmlhttprequest-*
-
-# IntelliJ IDE
-.idea
-
-# vscode IDE
-.vscode
-
-# docs artifacts
-docs/modules/api
-
-# only used to package @openzeppelin/contracts
-contracts/build/
-contracts/README.md
-
-# temporary artifact from solidity-coverage
-.coverage_artifacts
-.coverage_cache
-.coverage_contracts
-
-# hardat-exposed
-contracts-exposed
-
-# Hardhat
-cache
-artifacts
-
-# Foundry
-out
-cache_forge
-
-# Certora
-.certora*
-.last_confs
-certora_*
-.zip-output-url.txt
-
-# extends
-/abi
-/abi-pure
-/lib
-/contracts/diamond-2
-
+# TypeChain files
+/typechain
 /typechain-types
-/**/*.js
+
+# solidity-coverage files
+/coverage
+/coverage.json
+
+# solidity-framework
+.idea
+abi-exporter
+cache_forge
+lib
+
+# Hardhat Ignition default folder for deployments against a local node

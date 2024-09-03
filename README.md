@@ -14,7 +14,19 @@
 4. **在指定的区块链网络上运行TS脚本(比如部署)**
   - `npx hardhat --network <网络名> run <脚本路径>`
 
-5. 刷新hardhat网络配置(自动选择最佳网络):
-   
-  - `sol networks` // 刷新所有网络
-  - `sol networks mainnet` // 仅刷新以太坊主网
+# Sample Hardhat Project
+
+This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+
+Try running some of the following tasks:
+
+```shell
+npx hardhat help
+npx hardhat test
+REPORT_GAS=true npx hardhat test
+npx hardhat node
+npx hardhat ignition deploy ./ignition/modules/Lock.ts
+
+
+npx hardhat test test/diamond.ts
+```

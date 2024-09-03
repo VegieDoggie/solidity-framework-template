@@ -18,7 +18,20 @@ Core Operations:
 4. **Run TypeScript (TS) script on a specified blockchain network (e.g., deployment)**:
     - `npx hardhat --network <networkName> run <scriptPath>`
 
-5. Refresh the hardhat networks (automatically selects the best network):
 
-    - `sol networks` // refresh all
-    - `sol networks mainnet` // only refresh mainnet network
+# Sample Hardhat Project
+
+This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+
+Try running some of the following tasks:
+
+```shell
+npx hardhat help
+npx hardhat test
+REPORT_GAS=true npx hardhat test
+npx hardhat node
+npx hardhat ignition deploy ./ignition/modules/Lock.ts
+
+
+npx hardhat test test/diamond.ts
+```

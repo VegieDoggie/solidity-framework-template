@@ -1,12 +1,11 @@
 import {ethers} from "hardhat";
-import {deploy} from "../scripts/libraries/deployLib";
 import {Example} from "../typechain-types";
 import {loadFixture} from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import {expect} from "chai";
 import {HardhatEthersSigner} from "@nomicfoundation/hardhat-ethers/signers"
-import {Diamonds} from "../scripts/libraries/Diamonds";
+import {DiamondProxy,DeployHelper} from "../scripts/diamond-2";
 
-describe("钻石合约", () => {
+describe("Diamond", () => {
     let user: HardhatEthersSigner
     before("user", async () => {
         const accounts = await ethers.getSigners()
@@ -14,22 +13,22 @@ describe("钻石合约", () => {
     })
 
     async function deployFixture() {
-        return await Diamonds.deploy(false)
+        return await DiamondProxy.NewContract(false)
     }
 
-    it("代理测试样例", async () => {
+    it("proxy a logic", async () => {
         const diamond = await loadFixture(deployFixture);
-        const [example] = await deploy(false, "Example")
-        await diamond.proxy(example);
+        const [example] = await DeployHelper.deploy(false, "Example")
+        await diamond.deployProxy(example);
         await (await (example.attach(diamond.address) as Example).setNumber(1024n)).wait()
         expect(await (example.attach(diamond.address) as Example).getNumber()).eq(1024n)
     });
-    it("升级测试样例", async () => {
+    it("upgrade a logic", async () => {
         const diamond = await loadFixture(deployFixture);
-        const [oldExample] = await deploy(false, "Example")
-        await diamond.proxy(oldExample)
-        const [newExample] = await deploy(false, "Example")
-        await diamond.upgrade(oldExample.address, newExample)
+        const [oldExample] = await DeployHelper.deploy(false, "Example")
+        await diamond.deployProxy(oldExample)
+        const [newExample] = await DeployHelper.deploy(false, "Example")
+        await diamond.upgradeProxy(oldExample.address, newExample)
         // assert
         const selector = (newExample as any as Example).interface.getFunction("setNumber").selector
         expect(await diamond.facetAddress(selector)).eq(newExample.address)
