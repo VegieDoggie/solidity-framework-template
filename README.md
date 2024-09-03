@@ -1,6 +1,8 @@
 中文 / [English](https://github.com/VegieDoggie/solidity-framework-template/blob/main/README.en.md)
 # 通用Solidity开发测试框架
 
+> setup: `npm i` + `git submodule update --remote --init --recursive`
+
 核心操作:
 
 1. **编译**:

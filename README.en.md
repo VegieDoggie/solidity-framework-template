@@ -2,6 +2,8 @@
 
 # Universal Solidity Development and Testing Framework
 
+> setup: `npm i` + `git submodule update --remote --init --recursive`
+
 Core Operations:
 
 1. **Compilation**:
