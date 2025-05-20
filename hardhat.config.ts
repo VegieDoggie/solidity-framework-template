@@ -1,165 +1,77 @@
-import {HardhatUserConfig} from "hardhat/config";
+import {HardhatUserConfig, vars} from "hardhat/config";
 import {Fragment, FunctionFragment} from "ethers";
 import "@nomicfoundation/hardhat-toolbox";
 import "@openzeppelin/hardhat-upgrades";
 import "hardhat-abi-exporter";
-import "hardhat-ignore-warnings";
 import "hardhat-diamond-abi";
 import "dotenv/config";
 
+const RPC_URL = process.env.RPC_URL as string;
+const API_KEY = process.env.API_KEY as string;
+const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
+
+// hardhat env vars
+// const XXX = vars.get("XXX");
+
 const config: HardhatUserConfig = {
-        // warnings: {
-        //     'contracts/legacy/**/*': {
-        //         default: 'warn',
-        //     },
-        // },
         etherscan: {
-            apiKey: ""
+            apiKey: {
+                mainnet: API_KEY,
+                bsc: API_KEY,
+                arbitrumOne: API_KEY,
+                base: API_KEY,
+                arbitrumTestnet: API_KEY,
+            },
+        },
+        networks: {
+            mainnet: {
+                chainId: 1,
+                url: RPC_URL,
+                accounts: [PRIVATE_KEY],
+            },
+            bsc: {
+                chainId: 56,
+                url: RPC_URL,
+                accounts: [PRIVATE_KEY],
+            },
+            arbitrumOne: {
+                chainId: 42161,
+                url: RPC_URL,
+                accounts: [PRIVATE_KEY],
+            },
+            base: {
+                chainId: 8453,
+                url: RPC_URL,
+                accounts: [PRIVATE_KEY],
+            },
+            arbitrumTestnet: {
+                chainId: 421611,
+                url: RPC_URL,
+                accounts: [PRIVATE_KEY],
+            },
+            hardhat: {
+                forking: {
+                    url: RPC_URL,
+                    // blockNumber: 132401260
+                },
+                mining: {
+                    auto: true,
+                    interval: 200,
+                }
+            },
         },
         solidity: {
             compilers: [
                 {
-                    version: "0.8.24",
+                    version: "0.8.28",
                     settings: {
                         optimizer: {
                             enabled: true,
                             runs: 200,
                         },
-                        // viaIR: true
                     },
                 }
             ]
-        },
-        networks: {
-            hardhat: {
-                mining: {
-                    interval: 50
-                }
-                // forking: {
-                //   url: "https://arbitrum.public-rpc.com",
-                //   // blockNumber: 132401260
-                // }
-            },
-            mainnet: {
-                chainId: 1,
-                url: 'https://mainnet.gateway.tenderly.co'
-            },
-            bsc: {
-                chainId: 56,
-                url: 'https://bsc-dataseed1.bnbchain.org'
-            },
-            arbitrumOne: {
-                chainId: 42161,
-                url: 'https://rpc.ankr.com/arbitrum'
-            },
-            base: {
-                chainId: 8453,
-                url: 'https://base.gateway.tenderly.co'
-            },
-            avalanche: {
-                chainId: 43114,
-                url: 'https://rpc.ankr.com/avalanche'
-            },
-            polygon: {
-                chainId: 137,
-                url: 'https://polygon-rpc.com'
-            },
-            optimisticEthereum: {
-                chainId: 10,
-                url: 'https://rpc.ankr.com/optimism'
-            },
-            gnosis: {
-                chainId: 100,
-                url: 'https://rpc.ankr.com/gnosis'
-            },
-            opera: {
-                chainId: 250,
-                url: 'https://rpc.ankr.com/fantom'
-            },
-            moonbeam: {
-                chainId: 1284,
-                url: 'https://rpc.ankr.com/moonbeam'
-            },
-            aurora: {
-                chainId: 1313161554,
-                url: 'https://mainnet.aurora.dev'
-            },
-            moonriver: {
-                chainId: 1285,
-                url: 'https://moonriver.drpc.org'
-            },
-            harmony: {
-                chainId: 1666600000,
-                url: 'https://rpc.ankr.com/harmony'
-            },
-            goerli: {
-                chainId: 5,
-                url: 'https://eth-goerli.public.blastapi.io'
-            },
-            heco: {
-                chainId: 128,
-                url: 'https://http-mainnet.hecochain.com'
-            },
-            bscTestnet: {
-                chainId: 97,
-                url: 'https://endpoints.omniatech.io/v1/bsc/testnet/public'
-            },
-            sokol: {
-                chainId: 77,
-                url: 'https://sokol.poa.network'
-            },
-            hecoTestnet: {
-                chainId: 256,
-                url: 'https://http-testnet.hecochain.com'
-            },
-            optimisticGoerli: {
-                chainId: 420,
-                url: 'https://goerli.optimism.io'
-            },
-            moonbaseAlpha: {
-                chainId: 1287,
-                url: 'https://rpc.api.moonbase.moonbeam.network'
-            },
-            ftmTestnet: {
-                chainId: 4002,
-                url: 'https://rpc.testnet.fantom.network'
-            },
-            chiado: {
-                chainId: 10200,
-                url: 'https://rpc.chiadochain.net'
-            },
-            avalancheFujiTestnet: {
-                chainId: 43113,
-                url: 'https://rpc.ankr.com/avalanche_fuji'
-            },
-            polygonMumbai: {
-                chainId: 80001,
-                url: 'https://polygon-testnet.public.blastapi.io'
-            },
-            arbitrumTestnet: {
-                chainId: 421611,
-                url: 'https://rinkeby.arbitrum.io/rpc'
-            },
-            baseGoerli: {
-                chainId: 84531,
-                url: 'https://base-goerli.public.blastapi.io'
-            },
-            arbitrumGoerli: {
-                chainId: 421613,
-                url: 'https://goerli-rollup.arbitrum.io/rpc'
-            },
-            sepolia: {
-                chainId: 11155111,
-                url: 'https://endpoints.omniatech.io/v1/eth/sepolia/public'
-            },
-            auroraTestnet: {
-                chainId: 1313161555,
-                url: 'https://endpoints.omniatech.io/v1/aurora/testnet/public'
-            },
-            harmonyTest: {
-                chainId: 1666700000,
-                url: 'https://api.s0.b.hmny.io'
-            }
         },
         abiExporter: [
             {

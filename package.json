@@ -19,7 +19,6 @@
     "hardhat": "^2.22.10",
     "hardhat-abi-exporter": "^2.10.1",
     "hardhat-diamond-abi": "^3.0.1",
-    "hardhat-exposed": "^0.3.15",
-    "hardhat-ignore-warnings": "^0.2.11"
+    "hardhat-exposed": "^0.3.15"
   }
 }
